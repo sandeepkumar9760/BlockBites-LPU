@@ -1,6 +1,10 @@
 from django.shortcuts import render , get_object_or_404 , redirect
 from .models import Block , Stall , MenuItem , TimeSlot , Order ,  OrderItem
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.contrib import messages
+
 
 @login_required
 def checkout(request):
@@ -47,11 +51,13 @@ def checkout(request):
 
         return redirect('order_success')
     
-@login_required
+@login_required 
 def blocks(request):
     blocks = Block.objects.filter(is_active=True)
     return render(request, 'block.html', {'blocks': blocks})
 
+
+@login_required
 def stalls(request, block_id):
     block = get_object_or_404(Block, id=block_id)
     stalls = Stall.objects.filter(block=block, is_open=True)
@@ -61,6 +67,7 @@ def stalls(request, block_id):
         'stalls': stalls
     })
 
+@login_required
 def menu(request, stall_id):
     stall = get_object_or_404(Stall, id=stall_id)
     menu_items = MenuItem.objects.filter(stall=stall, is_available=True)
@@ -81,6 +88,7 @@ def add_to_cart(request, item_id):
     request.session['cart'] = cart
     return redirect(request.META.get('HTTP_REFERER', '/'))
 
+@login_required
 def cart_view(request):
     cart = request.session.get('cart', {})
     items = []
@@ -106,7 +114,20 @@ def cart_view(request):
     })
 
 def login_view(request):
-    return render(request, 'login.html')
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect("blocks")
+        else:
+            messages.error(request, "Invalid credentials.")
+            return redirect("login")
+
+    return render(request, "login.html")
 
 from django.contrib.auth.decorators import login_required
 
@@ -117,3 +138,33 @@ def blocks(request):
 
 def order_success(request):
     return render(request, 'success.html')
+
+def signup_view(request):
+    if request.method == "POST":
+        username = request.POST.get("username")
+        email = request.POST.get("email")
+        password = request.POST.get("password")
+        confirm_password = request.POST.get("confirm_password")
+
+        if password != confirm_password:
+            messages.error(request, "Passwords do not match.")
+            return redirect("signup")
+
+        if User.objects.filter(username=username).exists():
+            messages.error(request, "Username already exists.")
+            return redirect("signup")
+
+        user = User.objects.create_user(
+            username=username,
+            email=email,
+            password=password
+        )
+
+        login(request, user)
+        return redirect("blocks")
+
+    return render(request, "register.html")
+
+def logout_view(request):
+    logout(request)
+    return redirect("login")
