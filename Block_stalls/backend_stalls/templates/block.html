@@ -213,17 +213,39 @@
 
         <h1>Select Your Block</h1>
 
-        <div class="blocks-grid" id="blocksGrid"></div>
+        <div class="blocks-grid">
+    {% for block in blocks %}
+        <div class="block-card">
+            <div class="block-icon">🏢</div>
+            <div class="block-name">{{ block.name }}</div>
+
+            <div class="block-stats">
+                <div class="stat">
+                    <div class="stat-value">{{ block.stalls.count }}</div>
+                    <div class="stat-label">Stalls</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-value">--</div>
+                    <div class="stat-label">Orders</div>
+                </div>
+            </div>
+
+            <a href="{% url 'stalls' block.id %}">
+                <button class="select-btn">Select Block</button>
+            </a>
+        </div>
+    {% empty %}
+        <p>No blocks available.</p>
+    {% endfor %}
+</div>
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
         // Verify user is logged in
         const userEmail = localStorage.getItem('userEmail');
-        if (!userEmail) {
-            window.location.href = 'login-3d.html';
-        }
-        document.getElementById('userEmail').textContent = userEmail;
+        // Authentication temporarily disabled
 
         // Three.js background animation
         const scene = new THREE.Scene();
