@@ -292,19 +292,48 @@
     <canvas id="canvas"></canvas>
 
     <div class="container">
-        <header>
-            <div class="logo" onclick="goToPage('menu-3d.html')">🍜 LPU Food</div>
-            <a class="back-btn" onclick="goToPage('menu-3d.html')">← Back to Menu</a>
-        </header>
+        <a href="/blocks/" class="logo">🍜 LPU Food</a>
+
+<a href="javascript:history.back()" class="back-btn">
+    ← Back
+</a>
 
         <h1>Shopping Cart</h1>
 
         <div class="cart-content">
             <div class="cart-items" id="cartItemsContainer">
-                <div class="cart-empty">
-                    <div class="cart-empty-icon">🛒</div>
-                    <p>Your cart is empty. Start adding items!</p>
+                <div class="cart-items">
+
+{% if items %}
+    {% for entry in items %}
+        <div class="cart-item">
+            <div class="item-info">
+                <div class="item-icon">🍽️</div>
+                <div class="item-details">
+                    <h3>{{ entry.item.name }}</h3>
+                    <p>{{ entry.item.stall.name }}</p>
                 </div>
+            </div>
+
+            <div class="item-actions">
+                <div class="quantity-control">
+                    <span class="qty-display">{{ entry.quantity }}</span>
+                </div>
+
+                <div class="item-price">
+                    ₹ {{ entry.subtotal }}
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% else %}
+    <div class="cart-empty">
+        <div class="cart-empty-icon">🛒</div>
+        <p>Your cart is empty.</p>
+    </div>
+{% endif %}
+
+</div>
             </div>
 
             <div class="cart-summary">
@@ -312,7 +341,27 @@
                 
                 <div class="summary-row">
                     <span>Subtotal</span>
-                    <span id="subtotal">₹0</span>
+                    <div class="summary-row">
+    <span>Subtotal</span>
+    <span>₹ {{ total }}</span>
+</div>
+
+<div class="summary-row">
+    <span>Delivery Fee</span>
+    <span>₹ 50</span>
+</div>
+
+<div class="summary-row">
+    <span>Tax (10%)</span>
+    <span>₹ {{ total|floatformat:0|add:"0" }}</span>
+</div>
+
+<div class="summary-divider"></div>
+
+<div class="summary-total">
+    <span>Total</span>
+    <span>₹ {{ total|add:50 }}</span>
+</div>
                 </div>
 
                 <div class="summary-row">
