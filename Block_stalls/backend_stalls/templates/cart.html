@@ -212,21 +212,11 @@
                     <span>₹ {{ total }}</span>
                 </div>
 
-                <div class="summary-row">
-                    <span>Delivery Fee</span>
-                    <span>₹ 50</span>
-                </div>
-
-                <div class="summary-row">
-                    <span>Tax (10%)</span>
-                    <span>₹ {{ total|floatformat:0 }}</span>
-                </div>
-
                 <div class="summary-divider"></div>
 
                 <div class="summary-total">
                     <span>Total</span>
-                    <span>₹ {{ total|add:50 }}</span>
+                    <span>₹ {{ total}}</span>
                 </div>
 
                 <label style="margin-top:15px;">Pickup Slot</label>

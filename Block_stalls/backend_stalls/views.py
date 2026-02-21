@@ -1,5 +1,5 @@
 from django.shortcuts import render , get_object_or_404 , redirect
-from .models import Block , Stall , MenuItem , TimeSlot , Order ,  OrderItem
+from .models import Block , Stall , MenuItem , TimeSlot , Order ,  OrderItem 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
@@ -78,15 +78,19 @@ def menu(request, stall_id):
     })
 
 def add_to_cart(request, item_id):
-    cart = request.session.get('cart', {})
+    if request.method == "POST":
+        item = get_object_or_404(MenuItem, id=item_id)
 
-    if str(item_id) in cart:
-        cart[str(item_id)] += 1
-    else:
-        cart[str(item_id)] = 1
+        cart = request.session.get('cart', {})
 
-    request.session['cart'] = cart
-    return redirect(request.META.get('HTTP_REFERER', '/'))
+        if str(item_id) in cart:
+            cart[str(item_id)] += 1
+        else:
+            cart[str(item_id)] = 1
+
+        request.session['cart'] = cart
+
+        return redirect('cart')
 
 @login_required
 def cart_view(request):
@@ -128,8 +132,6 @@ def login_view(request):
             return redirect("login")
 
     return render(request, "login.html")
-
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def blocks(request):

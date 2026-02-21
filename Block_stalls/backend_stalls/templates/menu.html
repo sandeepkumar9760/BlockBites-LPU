@@ -248,9 +248,10 @@
                     <span style="color:red;">Non-Veg</span>
                 {% endif %}
 
-                <a href="{% url 'add_to_cart' item.id %}">
-                    <button>Add to Cart</button>
-                </a>
+                <form method="POST" action="{% url 'add_to_cart' item.id %}">
+                {% csrf_token %}
+                    <button type="submit">Add to Cart</button>
+                </form>
             </div>
         </div>
     {% empty %}
