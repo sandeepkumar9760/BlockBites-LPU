@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LPU Food Stall - 3D Pre-Ordering System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: #fff;
+            overflow: hidden;
+        }
+
+        #canvas {
+            display: block;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            pointer-events: auto;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            color: #e0e7ff;
+            text-decoration: none;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        nav a:hover {
+            color: #38bdf8;
+            transform: translateY(-2px);
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            gap: 20px;
+            pointer-events: auto;
+        }
+
+        h1 {
+            font-size: 64px;
+            font-weight: 700;
+            line-height: 1.2;
+            max-width: 700px;
+            background: linear-gradient(135deg, #38bdf8, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: #cbd5e1;
+            max-width: 600px;
+            line-height: 1.6;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            pointer-events: auto;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(56, 189, 248, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #38bdf8;
+            border: 2px solid #38bdf8;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(56, 189, 248, 0.2);
+            transform: translateY(-3px);
+        }
+
+        .floating-text {
+            position: absolute;
+            font-size: 14px;
+            color: #64748b;
+            pointer-events: none;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .info-section {
+            position: absolute;
+            bottom: 40px;
+            right: 40px;
+            background: rgba(30, 58, 138, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            max-width: 300px;
+            pointer-events: auto;
+        }
+
+        .info-section h3 {
+            color: #38bdf8;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .info-section p {
+            color: #cbd5e1;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 40px; }
+            nav { display: none; }
+            .cta-buttons { flex-direction: column; }
+            .info-section { display: none; }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+    
+    <div class="overlay">
+        <header>
+            <div class="logo">🍜 LPU Food</div>
+            <nav>
+                <a onclick="goToPage('login-3d.html')">Login</a>
+                <a onclick="goToPage('register-3d.html')">Register</a>
+                <a href="#features">Features</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </header>
+
+        <div class="hero">
+            <h1>Order Delicious Food in 3D</h1>
+            <p class="subtitle">Experience the future of campus food ordering with our immersive 3D interface</p>
+            <div class="cta-buttons">
+                <button class="btn btn-primary" onclick="goToPage('login-3d.html')">Order Now</button>
+                <button class="btn btn-secondary" onclick="scrollToFeatures()">Learn More</button>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>3D Visualization</h3>
+            <p>Explore food stalls in immersive 3D space. Rotate, zoom, and interact with your favorite food items before ordering.</p>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas'), antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x0f172a, 1);
+
+        camera.position.z = 5;
+
+        // Create background gradient
+        const canvas = renderer.domElement;
+        const ctx = canvas.getContext('webgl');
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0x38bdf8, 0.8);
+        directionalLight.position.set(5, 5, 5);
+        scene.add(directionalLight);
+
+        // Create 3D food items
+        const foodItems = [];
+
+        // Create rotating cubes representing food
+        for (let i = 0; i < 5; i++) {
+            const geometry = new THREE.BoxGeometry(0.8, 0.8, 0.8);
+            const material = new THREE.MeshPhongMaterial({
+                color: Math.random() * 0xffffff,
+                emissive: 0x38bdf8,
+                shininess: 100
+            });
+            const cube = new THREE.Mesh(geometry, material);
+            
+            cube.position.x = (i - 2) * 1.5;
+            cube.position.y = Math.sin(i) * 2;
+            cube.rotation.x = Math.random() * Math.PI;
+            cube.rotation.y = Math.random() * Math.PI;
+            
+            foodItems.push({
+                mesh: cube,
+                rotationSpeed: {
+                    x: (Math.random() - 0.5) * 0.01,
+                    y: (Math.random() - 0.5) * 0.01,
+                    z: (Math.random() - 0.5) * 0.01
+                }
+            });
+            
+            scene.add(cube);
+        }
+
+        // Create particle system
+        const particleGeometry = new THREE.BufferGeometry();
+        const particleCount = 100;
+        const positions = new Float32Array(particleCount * 3);
+
+        for (let i = 0; i < particleCount * 3; i += 3) {
+            positions[i] = (Math.random() - 0.5) * 15;
+            positions[i + 1] = (Math.random() - 0.5) * 15;
+            positions[i + 2] = (Math.random() - 0.5) * 15;
+        }
+
+        particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const particleMaterial = new THREE.PointsMaterial({
+            color: 0x38bdf8,
+            size: 0.05,
+            transparent: true,
+            opacity: 0.6
+        });
+        const particles = new THREE.Points(particleGeometry, particleMaterial);
+        scene.add(particles);
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Rotate food items
+            foodItems.forEach((item, index) => {
+                item.mesh.rotation.x += item.rotationSpeed.x;
+                item.mesh.rotation.y += item.rotationSpeed.y;
+                item.mesh.rotation.z += item.rotationSpeed.z;
+                
+                // Floating animation
+                item.mesh.position.y += Math.sin(Date.now() * 0.001 + index) * 0.01;
+            });
+
+            // Rotate particles
+            particles.rotation.x += 0.0001;
+            particles.rotation.y += 0.0002;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Navigation functions
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        function scrollToFeatures() {
+            // For landing page, just show the info
+            alert('Explore the full 3D experience. Start by logging in!');
+        }
+
+        // Mouse tracking for interactive 3D
+        document.addEventListener('mousemove', (e) => {
+            const x = (e.clientX / window.innerWidth) * 2 - 1;
+            const y = -(e.clientY / window.innerHeight) * 2 + 1;
+            
+            foodItems.forEach(item => {
+                item.mesh.rotation.x += y * 0.0001;
+                item.mesh.rotation.y += x * 0.0001;
+            });
+        });
+    </script>
+</body>
+</html>
