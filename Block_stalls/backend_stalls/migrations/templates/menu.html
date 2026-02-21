@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu - LPU Food 3D</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            padding: 40px 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+            font-size: 24px;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #38bdf8, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .menu-section {
+            margin-bottom: 50px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #e0e7ff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .menu-item {
+            background: rgba(30, 58, 138, 0.6);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(56, 189, 248, 0.3);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .menu-item:hover {
+            border-color: #38bdf8;
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(56, 189, 248, 0.2);
+        }
+
+        .item-image {
+            width: 100%;
+            height: 150px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 56px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .item-content {
+            padding: 15px;
+        }
+
+        .item-name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #e0e7ff;
+        }
+
+        .item-desc {
+            font-size: 12px;
+            color: #cbd5e1;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-price {
+            font-size: 18px;
+            font-weight: 700;
+            color: #38bdf8;
+        }
+
+        .veg-badge {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #22c55e;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #22c55e;
+        }
+
+        .add-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            border: none;
+            border-radius: 6px;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(56, 189, 248, 0.3);
+        }
+
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(56, 189, 248, 0.2);
+            border-radius: 6px;
+            padding: 4px 8px;
+        }
+
+        .qty-btn {
+            background: none;
+            border: none;
+            color: #38bdf8;
+            cursor: pointer;
+            font-weight: 600;
+            padding: 0 4px;
+        }
+
+        .qty-display {
+            font-size: 12px;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 28px; }
+            .menu-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div class="container">
+        <header>
+            <div class="logo" onclick="goToPage('stalls-3d.html')">🍜 LPU Food</div>
+            <div class="cart-icon" onclick="goToPage('cart-3d.html')">
+                🛒
+                <span class="cart-badge" id="cartBadge">0</span>
+            </div>
+        </header>
+
+        <h1 id="stallName"></h1>
+
+        <div id="menuContainer"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Verify user is logged in
+        const userEmail = localStorage.getItem('userEmail');
+        if (!userEmail) {
+            window.location.href = 'login-3d.html';
+        }
+
+        const selectedStall = localStorage.getItem('selectedStall') || 'Pizza Palace';
+        document.getElementById('stallName').textContent = selectedStall;
+
+        // Three.js background
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas'), antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x0f172a, 1);
+
+        camera.position.z = 5;
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0x38bdf8, 0.4);
+        directionalLight.position.set(5, 5, 5);
+        scene.add(directionalLight);
+
+        // Create floating food boxes
+        const foodBoxes = [];
+        const colors = [0xef4444, 0xf97316, 0xeab308, 0x22c55e, 0x3b82f6];
+        
+        for (let i = 0; i < 12; i++) {
+            const geometry = new THREE.BoxGeometry(0.6, 0.6, 0.6);
+            const material = new THREE.MeshPhongMaterial({
+                color: colors[i % colors.length],
+                emissive: colors[i % colors.length],
+                wireframe: true,
+                transparent: true,
+                opacity: 0.15
+            });
+            const box = new THREE.Mesh(geometry, material);
+            
+            box.position.x = (Math.random() - 0.5) * 30;
+            box.position.y = (Math.random() - 0.5) * 30;
+            box.position.z = Math.random() * -20 - 5;
+            
+            foodBoxes.push({
+                mesh: box,
+                speed: Math.random() * 0.2 + 0.05
+            });
+            
+            scene.add(box);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            foodBoxes.forEach((box, i) => {
+                box.mesh.rotation.x += box.speed * 0.0003;
+                box.mesh.rotation.y += box.speed * 0.0006;
+                box.mesh.rotation.z += box.speed * 0.0002;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Menu data
+        const menuData = {
+            'Pizza Palace': {
+                appetizers: [
+                    { name: 'Garlic Bread', icon: '🥖', price: 99, desc: 'Crispy & buttery', veg: true },
+                    { name: 'Bruschetta', icon: '🍅', price: 149, desc: 'Tomato & basil', veg: true }
+                ],
+                mains: [
+                    { name: 'Margherita Pizza', icon: '🍕', price: 349, desc: 'Classic cheese', veg: true },
+                    { name: 'Pepperoni Pizza', icon: '🍕', price: 399, desc: 'With meat', veg: false },
+                    { name: 'Veggie Supreme', icon: '🍕', price: 379, desc: 'Fresh vegetables', veg: true }
+                ],
+                desserts: [
+                    { name: 'Tiramisu', icon: '🍰', price: 199, desc: 'Italian dessert', veg: true },
+                    { name: 'Gelato', icon: '🍨', price: 149, desc: 'Italian ice cream', veg: true }
+                ]
+            },
+            'Burger Barn': {
+                appetizers: [
+                    { name: 'French Fries', icon: '🍟', price: 79, desc: 'Golden & crispy', veg: true },
+                    { name: 'Onion Rings', icon: '🧅', price: 99, desc: 'Fried onions', veg: true }
+                ],
+                mains: [
+                    { name: 'Classic Burger', icon: '🍔', price: 299, desc: 'Beef & cheese', veg: false },
+                    { name: 'Veggie Burger', icon: '🍔', price: 279, desc: 'Plant-based', veg: true },
+                    { name: 'Double Deluxe', icon: '🍔', price: 399, desc: 'Double patty', veg: false }
+                ],
+                desserts: [
+                    { name: 'Milkshake', icon: '🥤', price: 149, desc: 'Vanilla or Chocolate', veg: true }
+                ]
+            },
+            'Biryani Bowl': {
+                appetizers: [
+                    { name: 'Samosa', icon: '🥟', price: 49, desc: 'Crispy pastry', veg: true },
+                    { name: 'Pakora', icon: '🍢', price: 79, desc: 'Fried vegetables', veg: true }
+                ],
+                mains: [
+                    { name: 'Chicken Biryani', icon: '🍛', price: 249, desc: 'Fragrant rice', veg: false },
+                    { name: 'Veg Biryani', icon: '🍛', price: 199, desc: 'Mixed vegetables', veg: true },
+                    { name: 'Mutton Biryani', icon: '🍛', price: 299, desc: 'Tender meat', veg: false }
+                ],
+                desserts: [
+                    { name: 'Kheer', icon: '🥣', price: 99, desc: 'Rice pudding', veg: true },
+                    { name: 'Gulab Jamun', icon: '🍮', price: 129, desc: 'Sweet dumplings', veg: true }
+                ]
+            }
+        };
+
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        updateCartBadge();
+
+        function renderMenu() {
+            const menu = menuData[selectedStall] || menuData['Pizza Palace'];
+            const container = document.getElementById('menuContainer');
+            container.innerHTML = '';
+
+            Object.keys(menu).forEach(category => {
+                const section = document.createElement('div');
+                section.className = 'menu-section';
+                
+                const title = document.createElement('div');
+                title.className = 'section-title';
+                title.innerHTML = `<span>${category.charAt(0).toUpperCase() + category.slice(1)}</span>`;
+                section.appendChild(title);
+
+                const grid = document.createElement('div');
+                grid.className = 'menu-grid';
+
+                menu[category].forEach((item, index) => {
+                    const itemEl = document.createElement('div');
+                    itemEl.className = 'menu-item';
+                    
+                    const cartItem = cart.find(c => c.name === item.name);
+                    const quantity = cartItem ? cartItem.quantity : 0;
+
+                    itemEl.innerHTML = `
+                        <div class="item-image">${item.icon}</div>
+                        <div class="item-content">
+                            <div class="item-name">${item.name}</div>
+                            <div class="item-desc">${item.desc}</div>
+                            <div class="item-footer">
+                                <div>
+                                    <span class="item-price">₹${item.price}</span>
+                                    ${item.veg ? '<span class="veg-badge">🌱</span>' : ''}
+                                </div>
+                                ${quantity === 0 ? 
+                                    `<button class="add-btn" onclick="addToCart('${item.name}', ${item.price})">Add</button>` :
+                                    `<div class="quantity-control">
+                                        <button class="qty-btn" onclick="removeFromCart('${item.name}')">−</button>
+                                        <span class="qty-display">${quantity}</span>
+                                        <button class="qty-btn" onclick="addToCart('${item.name}', ${item.price})">+</button>
+                                    </div>`
+                                }
+                            </div>
+                        </div>
+                    `;
+                    grid.appendChild(itemEl);
+                });
+
+                section.appendChild(grid);
+                container.appendChild(section);
+            });
+        }
+
+        function addToCart(name, price) {
+            const item = cart.find(c => c.name === name);
+            if (item) {
+                item.quantity++;
+            } else {
+                cart.push({ name, price, quantity: 1, stall: selectedStall });
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartBadge();
+            renderMenu();
+        }
+
+        function removeFromCart(name) {
+            const index = cart.findIndex(c => c.name === name);
+            if (index !== -1) {
+                cart[index].quantity--;
+                if (cart[index].quantity === 0) {
+                    cart.splice(index, 1);
+                }
+            }
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartBadge();
+            renderMenu();
+        }
+
+        function updateCartBadge() {
+            const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartBadge').textContent = total;
+        }
+
+        function goToPage(page) {
+            window.location.href = page;
+        }
+
+        renderMenu();
+    </script>
+</body>
+</html>
