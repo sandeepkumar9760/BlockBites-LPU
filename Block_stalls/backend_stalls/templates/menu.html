@@ -248,7 +248,9 @@
                     <span style="color:red;">Non-Veg</span>
                 {% endif %}
 
-                <button>Add to Cart</button>
+                <a href="{% url 'add_to_cart' item.id %}">
+                    <button>Add to Cart</button>
+                </a>
             </div>
         </div>
     {% empty %}

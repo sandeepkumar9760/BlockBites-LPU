@@ -1,7 +1,4 @@
-from django.shortcuts import render , get_object_or_404
-
-# Create your views here.
-from django.shortcuts import render
+from django.shortcuts import render , get_object_or_404 , redirect
 from .models import Block , Stall , MenuItem
 
 def blocks(request):
@@ -36,6 +33,27 @@ def add_to_cart(request, item_id):
 
     request.session['cart'] = cart
     return redirect(request.META.get('HTTP_REFERER', '/'))
+
+def cart_view(request):
+    cart = request.session.get('cart', {})
+    items = []
+    total = 0
+
+    for item_id, quantity in cart.items():
+        item = MenuItem.objects.get(id=item_id)
+        subtotal = item.price * quantity
+        total += subtotal
+
+        items.append({
+            'item': item,
+            'quantity': quantity,
+            'subtotal': subtotal
+        })
+
+    return render(request, 'cart.html', {
+        'items': items,
+        'total': total
+    })
 
 def login_view(request):
     return render(request, 'login.html')
