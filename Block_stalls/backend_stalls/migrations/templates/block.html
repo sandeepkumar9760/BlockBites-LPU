@@ -296,39 +296,7 @@
 
         
 
-        // Render blocks
-        const blocksGrid = document.getElementById('blocksGrid');
-        blocks.forEach((block, index) => {
-            const blockCard = document.createElement('div');
-            blockCard.className = 'block-card';
-            blockCard.innerHTML = `
-                <div class="block-icon">${block.icon}</div>
-                <div class="block-name">${block.name}</div>
-                <div class="block-info">${block.location}</div>
-                <div class="block-stats">
-                    <div class="stat">
-                        <div class="stat-value">${block.stalls}</div>
-                        <div class="stat-label">Stalls</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-value">${block.activeOrders}</div>
-                        <div class="stat-label">Orders</div>
-                    </div>
-                </div>
-                <button class="select-btn" onclick="selectBlock('${block.name}')">Select Block</button>
-            `;
-            blocksGrid.appendChild(blockCard);
-        });
-
-        function selectBlock(blockName) {
-            localStorage.setItem('selectedBlock', blockName);
-            window.location.href = 'stalls-3d.html';
-        }
-
-        function logout() {
-            localStorage.clear();
-            window.location.href = 'index-3d.html';
-        }
+       
     </script>
 </body>
 </html>
