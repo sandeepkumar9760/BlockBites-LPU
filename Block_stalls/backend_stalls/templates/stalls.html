@@ -215,7 +215,38 @@
 
         <h1>Available Stalls</h1>
 
-        <div class="stalls-grid" id="stallsGrid"></div>
+        <div class="stalls-grid">
+    {% for stall in stalls %}
+        <div class="stall-card">
+            <div class="stall-image">🍽️</div>
+            <div class="stall-content">
+                <div class="stall-name">{{ stall.name }}</div>
+                <div class="stall-cuisine">Food Stall</div>
+
+                <div class="stall-rating">
+                    <span class="stars">★★★★☆</span>
+                    <span class="rating-text">
+                        {{ stall.rating }}
+                    </span>
+                </div>
+
+                <div class="stall-meta">
+                    <span>Open Now</span>
+                </div>
+
+                <span class="status-badge status-open">
+                    {% if stall.is_open %}Open{% else %}Closed{% endif %}
+                </span>
+
+                <a href="{% url 'menu' stall.id %}">
+                    <button class="order-btn">Browse Menu</button>
+                </a>
+            </div>
+        </div>
+    {% empty %}
+        <p>No stalls available in this block.</p>
+    {% endfor %}
+</div>
 
         <div class="section-title">Popular This Week</div>
         <div class="stalls-grid" id="popularStalls"></div>
@@ -223,15 +254,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // Verify user is logged in
-        const userEmail = localStorage.getItem('userEmail');
-        if (!userEmail) {
-            window.location.href = 'login-3d.html';
-        }
-
-        const selectedBlock = localStorage.getItem('selectedBlock') || 'Block A';
-        document.getElementById('blockName').textContent = selectedBlock;
-
+        
         // Three.js background
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -290,54 +313,6 @@
             camera.updateProjectionMatrix();
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
-
-        // Stall data
-        const stalls = [
-            { name: 'Pizza Palace', icon: '🍕', cuisine: 'Italian', rating: 4.5, reviews: 125, orders: 340, time: '30-45 min' },
-            { name: 'Burger Barn', icon: '🍔', cuisine: 'American', rating: 4.3, reviews: 98, orders: 280, time: '25-35 min' },
-            { name: 'Sushi Spot', icon: '🍣', cuisine: 'Japanese', rating: 4.7, reviews: 156, orders: 210, time: '40-50 min' },
-            { name: 'Taco Fiesta', icon: '🌮', cuisine: 'Mexican', rating: 4.4, reviews: 112, orders: 310, time: '20-30 min' },
-            { name: 'Biryani Bowl', icon: '🍛', cuisine: 'Indian', rating: 4.6, reviews: 189, orders: 425, time: '35-45 min' },
-            { name: 'Pasta Pasta', icon: '🍝', cuisine: 'Italian', rating: 4.5, reviews: 134, orders: 295, time: '25-40 min' }
-        ];
-
-        const popularStalls = stalls.slice(0, 3);
-
-        function renderStalls(containerId, stallList) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = '';
-            
-            stallList.forEach((stall, index) => {
-                const card = document.createElement('div');
-                card.className = 'stall-card';
-                card.innerHTML = `
-                    <div class="stall-image rotating">${stall.icon}</div>
-                    <div class="stall-content">
-                        <div class="stall-name">${stall.name}</div>
-                        <div class="stall-cuisine">${stall.cuisine}</div>
-                        <div class="stall-rating">
-                            <span class="stars">★★★★☆</span>
-                            <span class="rating-text">${stall.rating} (${stall.reviews})</span>
-                        </div>
-                        <div class="stall-meta">
-                            <span>${stall.orders} orders</span>
-                            <span>${stall.time}</span>
-                        </div>
-                        <span class="status-badge status-open">Open</span>
-                        <button class="order-btn" onclick="selectStall('${stall.name}')">Browse Menu</button>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
-        }
-
-        renderStalls('stallsGrid', stalls);
-        renderStalls('popularStalls', popularStalls);
-
-        function selectStall(stallName) {
-            localStorage.setItem('selectedStall', stallName);
-            window.location.href = 'menu-3d.html';
-        }
 
         function goToPage(page) {
             window.location.href = page;
