@@ -1,6 +1,51 @@
 from django.shortcuts import render , get_object_or_404 , redirect
-from .models import Block , Stall , MenuItem , TimeSlot
+from .models import Block , Stall , MenuItem , TimeSlot , Order ,  OrderItem
+from django.contrib.auth.decorators import login_required
 
+@login_required
+def checkout(request):
+    if request.method == "POST":
+        cart = request.session.get('cart', {})
+        slot_id = request.POST.get('slot')
+
+        if not cart:
+            return redirect('cart')
+
+        time_slot = TimeSlot.objects.get(id=slot_id)
+
+        # Get first item to determine block and stall
+        first_item = MenuItem.objects.get(id=list(cart.keys())[0])
+        block = first_item.stall.block
+        stall = first_item.stall
+
+        order = Order.objects.create(
+            user=request.user,
+            block=block,
+            stall=stall,
+            time_slot=time_slot,
+            total_price=0
+        )
+
+        total = 0
+
+        for item_id, quantity in cart.items():
+            item = MenuItem.objects.get(id=item_id)
+            subtotal = item.price * quantity
+            total += subtotal
+
+            OrderItem.objects.create(
+                order=order,
+                menu_item=item,
+                quantity=quantity,
+                subtotal=subtotal
+            )
+
+        order.total_price = total
+        order.save()
+
+        request.session['cart'] = {}
+
+        return redirect('order_success')
 def blocks(request):
     blocks = Block.objects.filter(is_active=True)
     return render(request, 'block.html', {'blocks': blocks})
@@ -67,3 +112,6 @@ from django.contrib.auth.decorators import login_required
 def blocks(request):
     blocks = Block.objects.filter(is_active=True)
     return render(request, 'block.html', {'blocks': blocks})
+
+def order_success(request):
+    return render(request, 'success.html')

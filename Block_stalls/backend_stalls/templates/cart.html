@@ -3,13 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart - LPU Food 3D</title>
+    <title>Shopping Cart</title>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -45,17 +42,15 @@
         .logo {
             font-size: 20px;
             font-weight: bold;
-            cursor: pointer;
+            text-decoration: none;
             background: linear-gradient(135deg, #38bdf8, #0ea5e9);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .back-btn {
             color: #38bdf8;
             text-decoration: none;
-            cursor: pointer;
             font-size: 14px;
         }
 
@@ -65,14 +60,12 @@
             background: linear-gradient(135deg, #38bdf8, #60a5fa);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .cart-content {
             display: grid;
             grid-template-columns: 1fr 350px;
             gap: 30px;
-            margin-bottom: 30px;
         }
 
         .cart-items {
@@ -83,106 +76,36 @@
             padding: 30px;
         }
 
-        .cart-empty {
-            text-align: center;
-            padding: 60px 30px;
-            color: #cbd5e1;
-        }
-
-        .cart-empty-icon {
-            font-size: 64px;
-            margin-bottom: 20px;
-        }
-
         .cart-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255,255,255,0.05);
             border-radius: 12px;
             margin-bottom: 15px;
             border: 1px solid rgba(56, 189, 248, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .cart-item:hover {
-            border-color: #38bdf8;
         }
 
         .item-info {
             display: flex;
             gap: 15px;
             align-items: center;
-            flex: 1;
         }
 
-        .item-icon {
-            font-size: 32px;
-        }
+        .item-icon { font-size: 28px; }
 
-        .item-details h3 {
-            color: #e0e7ff;
-            margin-bottom: 4px;
-        }
-
-        .item-details p {
-            color: #94a3b8;
-            font-size: 13px;
-        }
-
-        .item-actions {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .quantity-control {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: rgba(56, 189, 248, 0.2);
-            border-radius: 8px;
-            padding: 8px 12px;
-        }
-
-        .qty-btn {
-            background: none;
-            border: none;
-            color: #38bdf8;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 16px;
-            padding: 0;
-        }
-
-        .qty-display {
-            min-width: 20px;
-            text-align: center;
-        }
+        .item-details h3 { color: #e0e7ff; }
 
         .item-price {
-            font-size: 18px;
-            font-weight: 700;
+            font-weight: bold;
             color: #38bdf8;
-            min-width: 60px;
-            text-align: right;
         }
 
-        .remove-btn {
-            background: rgba(239, 68, 68, 0.2);
-            border: 1px solid #ef4444;
-            color: #ef4444;
-            border-radius: 6px;
-            padding: 6px 12px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.3s ease;
-        }
-
-        .remove-btn:hover {
-            background: #ef4444;
-            color: #fff;
+        .cart-empty {
+            text-align: center;
+            padding: 50px;
+            color: #cbd5e1;
         }
 
         .cart-summary {
@@ -191,24 +114,12 @@
             border: 2px solid rgba(56, 189, 248, 0.3);
             border-radius: 16px;
             padding: 25px;
-            height: fit-content;
-            position: sticky;
-            top: 20px;
-        }
-
-        .summary-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 20px;
-            color: #e0e7ff;
         }
 
         .summary-row {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 12px;
-            color: #cbd5e1;
-            font-size: 14px;
+            margin-bottom: 10px;
         }
 
         .summary-divider {
@@ -220,246 +131,147 @@
             display: flex;
             justify-content: space-between;
             font-size: 18px;
-            font-weight: 700;
+            font-weight: bold;
             color: #38bdf8;
         }
 
-        .form-group {
-            margin-top: 20px;
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            margin-bottom: 8px;
-            color: #e0e7ff;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        input, select {
+        select {
             width: 100%;
             padding: 10px;
-            border: 1px solid rgba(56, 189, 248, 0.3);
+            margin-top: 10px;
             border-radius: 8px;
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255,255,255,0.05);
             color: #fff;
-            font-size: 13px;
-            transition: all 0.3s ease;
-        }
-
-        input:focus, select:focus {
-            outline: none;
-            border-color: #38bdf8;
-            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56,189,248,0.3);
         }
 
         .checkout-btn {
             width: 100%;
             padding: 12px;
-            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            margin-top: 20px;
             border: none;
             border-radius: 8px;
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
             color: #fff;
             font-weight: 600;
             cursor: pointer;
-            margin-top: 20px;
-            transition: all 0.3s ease;
-        }
-
-        .checkout-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(56, 189, 248, 0.3);
-        }
-
-        .checkout-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
         }
 
         @media (max-width: 768px) {
-            h1 { font-size: 28px; }
-            .cart-content {
-                grid-template-columns: 1fr;
-            }
-            .cart-summary {
-                position: static;
-            }
+            .cart-content { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <canvas id="canvas"></canvas>
 
-    <div class="container">
+<canvas id="canvas"></canvas>
+
+<div class="container">
+
+    <header>
         <a href="/blocks/" class="logo">🍜 LPU Food</a>
+        <a href="javascript:history.back()" class="back-btn">← Back</a>
+    </header>
 
-<a href="javascript:history.back()" class="back-btn">
-    ← Back
-</a>
+    <h1>Shopping Cart</h1>
 
-        <h1>Shopping Cart</h1>
+    <div class="cart-content">
 
-        <div class="cart-content">
-            <div class="cart-items" id="cartItemsContainer">
-                <div class="cart-items">
+        <!-- CART ITEMS -->
+        <div class="cart-items">
+            {% if items %}
+                {% for entry in items %}
+                    <div class="cart-item">
+                        <div class="item-info">
+                            <div class="item-icon">🍽️</div>
+                            <div class="item-details">
+                                <h3>{{ entry.item.name }}</h3>
+                                <p>{{ entry.item.stall.name }}</p>
+                            </div>
+                        </div>
 
-{% if items %}
-    {% for entry in items %}
-        <div class="cart-item">
-            <div class="item-info">
-                <div class="item-icon">🍽️</div>
-                <div class="item-details">
-                    <h3>{{ entry.item.name }}</h3>
-                    <p>{{ entry.item.stall.name }}</p>
+                        <div class="item-price">
+                            ₹ {{ entry.subtotal }}
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="cart-empty">
+                    🛒 Your cart is empty.
                 </div>
-            </div>
-
-            <div class="item-actions">
-                <div class="quantity-control">
-                    <span class="qty-display">{{ entry.quantity }}</span>
-                </div>
-
-                <div class="item-price">
-                    ₹ {{ entry.subtotal }}
-                </div>
-            </div>
+            {% endif %}
         </div>
-    {% endfor %}
-{% else %}
-    <div class="cart-empty">
-        <div class="cart-empty-icon">🛒</div>
-        <p>Your cart is empty.</p>
-    </div>
-{% endif %}
 
-</div>
-            </div>
+        <!-- SUMMARY -->
+        <div class="cart-summary">
+            <form method="POST" action="{% url 'checkout' %}">
+                {% csrf_token %}
 
-            <div class="cart-summary">
-                <div class="summary-title">Order Summary</div>
-                
                 <div class="summary-row">
                     <span>Subtotal</span>
-                    <div class="summary-row">
-    <span>Subtotal</span>
-    <span>₹ {{ total }}</span>
-</div>
-
-<div class="summary-row">
-    <span>Delivery Fee</span>
-    <span>₹ 50</span>
-</div>
-
-<div class="summary-row">
-    <span>Tax (10%)</span>
-    <span>₹ {{ total|floatformat:0|add:"0" }}</span>
-</div>
-
-<div class="summary-divider"></div>
-
-<div class="summary-total">
-    <span>Total</span>
-    <span>₹ {{ total|add:50 }}</span>
-</div>
+                    <span>₹ {{ total }}</span>
                 </div>
 
                 <div class="summary-row">
                     <span>Delivery Fee</span>
-                    <span id="delivery">₹0</span>
+                    <span>₹ 50</span>
                 </div>
 
                 <div class="summary-row">
                     <span>Tax (10%)</span>
-                    <span id="tax">₹0</span>
+                    <span>₹ {{ total|floatformat:0 }}</span>
                 </div>
 
                 <div class="summary-divider"></div>
 
                 <div class="summary-total">
                     <span>Total</span>
-                    <span id="total">₹0</span>
+                    <span>₹ {{ total|add:50 }}</span>
                 </div>
 
-                <div class="form-group">
-                    <label>Pickup Slot</label>
-                    <select id="slot">
-                        <option>12:00 PM - 12:30 PM</option>
-                        <option>12:30 PM - 1:00 PM</option>
-                        <option>1:00 PM - 1:30 PM</option>
-                        <option>1:30 PM - 2:00 PM</option>
-                        <option>2:00 PM - 2:30 PM</option>
-                    </select>
-                </div>
+                <label style="margin-top:15px;">Pickup Slot</label>
+                <select name="slot" required>
+                    {% for slot in time_slots %}
+                        <option value="{{ slot.id }}">
+                            {{ slot.start_time }} - {{ slot.end_time }}
+                        </option>
+                    {% endfor %}
+                </select>
 
-                <button class="checkout-btn" id="checkoutBtn" onclick="checkout()" disabled>Place Order</button>
-            </div>
+                <button class="checkout-btn">
+                    Place Order
+                </button>
+            </form>
         </div>
+
     </div>
+</div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas'), antialias: true, alpha: true });
 
-        // Three.js background
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas'), antialias: true, alpha: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0x0f172a, 1);
+    camera.position.z = 5;
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+    scene.add(ambientLight);
+
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
         renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setClearColor(0x0f172a, 1);
+    });
+</script>
 
-        camera.position.z = 5;
-
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
-        scene.add(ambientLight);
-
-        const directionalLight = new THREE.DirectionalLight(0x38bdf8, 0.4);
-        directionalLight.position.set(5, 5, 5);
-        scene.add(directionalLight);
-
-        // Create floating coins
-        const coins = [];
-        for (let i = 0; i < 8; i++) {
-            const geometry = new THREE.CylinderGeometry(0.5, 0.5, 0.1, 32);
-            const material = new THREE.MeshPhongMaterial({
-                color: 0xfbbf24,
-                emissive: 0xfbbf24,
-                wireframe: true,
-                transparent: true,
-                opacity: 0.2
-            });
-            const coin = new THREE.Mesh(geometry, material);
-            
-            coin.position.x = (Math.random() - 0.5) * 25;
-            coin.position.y = (Math.random() - 0.5) * 25;
-            coin.position.z = Math.random() * -20 - 5;
-            
-            coins.push({
-                mesh: coin,
-                speed: Math.random() * 0.3 + 0.1
-            });
-            
-            scene.add(coin);
-        }
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            coins.forEach(coin => {
-                coin.mesh.rotation.y += coin.speed * 0.01;
-            });
-
-            renderer.render(scene, camera);
-        }
-
-        animate();
-
-        window.addEventListener('resize', () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        });
-
-        
-    </script>
 </body>
 </html>
