@@ -350,11 +350,6 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
-        // Verify user is logged in
-        const userEmail = localStorage.getItem('userEmail');
-        if (!userEmail) {
-            window.location.href = 'login-3d.html';
-        }
 
         // Three.js background
         const scene = new THREE.Scene();
@@ -415,119 +410,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // Cart functionality
-        let cart = JSON.parse(localStorage.getItem('cart')) || [];
-
-        function renderCart() {
-            const container = document.getElementById('cartItemsContainer');
-            
-            if (cart.length === 0) {
-                container.innerHTML = `
-                    <div class="cart-empty">
-                        <div class="cart-empty-icon">🛒</div>
-                        <p>Your cart is empty. Start adding items!</p>
-                    </div>
-                `;
-                document.getElementById('checkoutBtn').disabled = true;
-                return;
-            }
-
-            container.innerHTML = '';
-            document.getElementById('checkoutBtn').disabled = false;
-
-            cart.forEach(item => {
-                const itemEl = document.createElement('div');
-                itemEl.className = 'cart-item';
-                itemEl.innerHTML = `
-                    <div class="item-info">
-                        <div class="item-icon">🍕</div>
-                        <div class="item-details">
-                            <h3>${item.name}</h3>
-                            <p>${item.stall}</p>
-                        </div>
-                    </div>
-                    <div class="item-actions">
-                        <div class="quantity-control">
-                            <button class="qty-btn" onclick="decreaseQty('${item.name}')">−</button>
-                            <span class="qty-display">${item.quantity}</span>
-                            <button class="qty-btn" onclick="increaseQty('${item.name}')">+</button>
-                        </div>
-                        <div class="item-price">₹${item.price * item.quantity}</div>
-                        <button class="remove-btn" onclick="removeItem('${item.name}')">Remove</button>
-                    </div>
-                `;
-                container.appendChild(itemEl);
-            });
-
-            updateSummary();
-        }
-
-        function increaseQty(name) {
-            const item = cart.find(c => c.name === name);
-            if (item) item.quantity++;
-            localStorage.setItem('cart', JSON.stringify(cart));
-            renderCart();
-        }
-
-        function decreaseQty(name) {
-            const item = cart.find(c => c.name === name);
-            if (item && item.quantity > 1) item.quantity--;
-            localStorage.setItem('cart', JSON.stringify(cart));
-            renderCart();
-        }
-
-        function removeItem(name) {
-            cart = cart.filter(c => c.name !== name);
-            localStorage.setItem('cart', JSON.stringify(cart));
-            renderCart();
-        }
-
-        function updateSummary() {
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const delivery = subtotal > 0 ? 50 : 0;
-            const tax = Math.round(subtotal * 0.1);
-            const total = subtotal + delivery + tax;
-
-            document.getElementById('subtotal').textContent = '₹' + subtotal;
-            document.getElementById('delivery').textContent = '₹' + delivery;
-            document.getElementById('tax').textContent = '₹' + tax;
-            document.getElementById('total').textContent = '₹' + total;
-        }
-
-        function checkout() {
-            if (cart.length === 0) {
-                alert('Cart is empty!');
-                return;
-            }
-
-            const slot = document.getElementById('slot').value;
-            const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
-            const delivery = 50;
-            const tax = Math.round(subtotal * 0.1);
-            const total = subtotal + delivery + tax;
-
-            const order = {
-                id: 'ORD' + Date.now(),
-                items: cart,
-                slot: slot,
-                total: total,
-                timestamp: new Date().toISOString()
-            };
-
-            let orders = JSON.parse(localStorage.getItem('orders')) || [];
-            orders.push(order);
-            localStorage.setItem('orders', JSON.stringify(orders));
-            localStorage.setItem('cart', JSON.stringify([]));
-
-            alert('Order placed successfully! Order ID: ' + order.id);
-            window.location.href = 'student-dashboard-3d.html';
-        }
-
-        function goToPage(page) {
-            window.location.href = page;
-        }
-
-        renderCart();
+        
     </script>
 </body>
 </html>
