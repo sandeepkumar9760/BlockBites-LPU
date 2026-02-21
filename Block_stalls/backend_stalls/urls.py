@@ -7,4 +7,5 @@ urlpatterns = [
     path('blocks/', views.blocks, name='blocks'),
     path('stalls/<int:block_id>/', views.stalls, name='stalls'),
     path('login/', views.login_view, name='login'),
+    path('menu/<int:stall_id>/', views.menu, name='menu'),
 ]

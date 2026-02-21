@@ -225,21 +225,36 @@
     </style>
 </head>
 <body>
-    <canvas id="canvas"></canvas>
+    <h1>Menu - {{ stall.name }}</h1>
 
-    <div class="container">
-        <header>
-            <div class="logo" onclick="goToPage('stalls-3d.html')">🍜 LPU Food</div>
-            <div class="cart-icon" onclick="goToPage('cart-3d.html')">
-                🛒
-                <span class="cart-badge" id="cartBadge">0</span>
+<div class="menu-grid">
+    {% for item in menu_items %}
+        <div class="menu-card">
+            <div class="menu-image">
+                {% if item.image %}
+                    <img src="{{ item.image.url }}" width="100%">
+                {% else %}
+                    🍽️
+                {% endif %}
             </div>
-        </header>
 
-        <h1 id="stallName"></h1>
+            <div class="menu-content">
+                <h3>{{ item.name }}</h3>
+                <p>₹ {{ item.price }}</p>
 
-        <div id="menuContainer"></div>
-    </div>
+                {% if item.is_veg %}
+                    <span style="color:lightgreen;">Veg</span>
+                {% else %}
+                    <span style="color:red;">Non-Veg</span>
+                {% endif %}
+
+                <button>Add to Cart</button>
+            </div>
+        </div>
+    {% empty %}
+        <p>No items available.</p>
+    {% endfor %}
+</div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>

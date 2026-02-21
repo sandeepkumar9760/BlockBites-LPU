@@ -2,7 +2,7 @@ from django.shortcuts import render , get_object_or_404
 
 # Create your views here.
 from django.shortcuts import render
-from .models import Block , Stall
+from .models import Block , Stall , MenuItem
 
 def blocks(request):
     blocks = Block.objects.filter(is_active=True)
@@ -15,6 +15,15 @@ def stalls(request, block_id):
     return render(request, 'stalls.html', {
         'block': block,
         'stalls': stalls
+    })
+
+def menu(request, stall_id):
+    stall = get_object_or_404(Stall, id=stall_id)
+    menu_items = MenuItem.objects.filter(stall=stall, is_available=True)
+
+    return render(request, 'menu.html', {
+        'stall': stall,
+        'menu_items': menu_items
     })
 
 def login_view(request):
