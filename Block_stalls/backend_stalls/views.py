@@ -26,6 +26,17 @@ def menu(request, stall_id):
         'menu_items': menu_items
     })
 
+def add_to_cart(request, item_id):
+    cart = request.session.get('cart', {})
+
+    if str(item_id) in cart:
+        cart[str(item_id)] += 1
+    else:
+        cart[str(item_id)] = 1
+
+    request.session['cart'] = cart
+    return redirect(request.META.get('HTTP_REFERER', '/'))
+
 def login_view(request):
     return render(request, 'login.html')
 
