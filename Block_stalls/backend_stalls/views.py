@@ -1,5 +1,5 @@
 from django.shortcuts import render , get_object_or_404 , redirect
-from .models import Block , Stall , MenuItem
+from .models import Block , Stall , MenuItem , TimeSlot
 
 def blocks(request):
     blocks = Block.objects.filter(is_active=True)
@@ -50,9 +50,12 @@ def cart_view(request):
             'subtotal': subtotal
         })
 
+    time_slots = TimeSlot.objects.all()
+
     return render(request, 'cart.html', {
         'items': items,
-        'total': total
+        'total': total,
+        'time_slots': time_slots
     })
 
 def login_view(request):
