@@ -46,6 +46,8 @@ def checkout(request):
         request.session['cart'] = {}
 
         return redirect('order_success')
+    
+@login_required
 def blocks(request):
     blocks = Block.objects.filter(is_active=True)
     return render(request, 'block.html', {'blocks': blocks})
