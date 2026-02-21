@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - LPU Food Stall</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #38bdf8 100%);
+            min-height: 100vh;
+            padding: 2rem;
+        }
+
+        /* Navigation Bar */
+        nav {
+            background: rgba(30, 58, 138, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            margin: -2rem -2rem 2rem -2rem;
+            border-radius: 0 0 15px 15px;
+        }
+
+        .logo {
+            font-family: 'Poppins', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #38bdf8;
+        }
+
+        .logout-btn {
+            padding: 0.5rem 1.5rem;
+            background: #38bdf8;
+            color: #1e3a8a;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            box-shadow: 0 4px 12px rgba(56, 189, 248, 0.4);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .admin-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-header h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            color: #1e3a8a;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-header p {
+            color: #6b7280;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-value {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        /* Charts Section */
+        .charts-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .chart-card h2 {
+            font-family: 'Poppins', sans-serif;
+            color: #1e3a8a;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        /* Bar Chart (using div elements) */
+        .bar-chart {
+            display: flex;
+            align-items: flex-end;
+            justify-content: space-around;
+            height: 300px;
+            border-bottom: 2px solid #e5e7eb;
+            padding-bottom: 1rem;
+        }
+
+        .bar-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bar {
+            width: 40px;
+            background: linear-gradient(135deg, #38bdf8 0%, #0891b2 100%);
+            border-radius: 4px 4px 0 0;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .bar:hover {
+            filter: brightness(1.1);
+        }
+
+        .bar-label {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-weight: 600;
+        }
+
+        .bar-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: #1e3a8a;
+            font-size: 0.9rem;
+        }
+
+        /* Order Counter */
+        .counter-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .counter-card h3 {
+            font-family: 'Poppins', sans-serif;
+            color: #1e3a8a;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .counter-display {
+            font-family: 'Poppins', sans-serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: #38bdf8;
+            margin: 1rem 0;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .counter-info {
+            color: #6b7280;
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+
+        /* Table */
+        .table-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+
+        .table-card h2 {
+            font-family: 'Poppins', sans-serif;
+            color: #1e3a8a;
+            margin-bottom: 1.5rem;
+            font-size: 1.3rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f3f4f6;
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #f3f4f6;
+            color: #6b7280;
+        }
+
+        tr:hover {
+            background: #f9fafb;
+        }
+
+        .stall-name {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            color: #1e3a8a;
+        }
+
+        .order-count {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: #38bdf8;
+            font-size: 1.1rem;
+        }
+
+        .refresh-btn {
+            padding: 0.75rem 1.5rem;
+            background: #38bdf8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-bottom: 1rem;
+        }
+
+        .refresh-btn:hover {
+            background: #0891b2;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .charts-section {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            nav {
+                margin: -1rem -1rem 2rem -1rem;
+            }
+
+            .admin-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .counter-display {
+                font-size: 2.5rem;
+            }
+
+            table {
+                font-size: 0.9rem;
+            }
+
+            th, td {
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="logo">🍽️ Admin Dashboard</div>
+        <button class="logout-btn" onclick="logout()">Logout</button>
+    </nav>
+
+    <!-- Container -->
+    <div class="container">
+        <!-- Header -->
+        <div class="admin-header">
+            <h1>Admin Control Panel 🔐</h1>
+            <p>Real-time monitoring and analytics for the LPU Food Stall system</p>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">📦</div>
+                <div class="stat-value" id="totalOrdersStat">0</div>
+                <div class="stat-label">Total Orders</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🍽️</div>
+                <div class="stat-value" id="totalStallsStat">0</div>
+                <div class="stat-label">Active Stalls</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">💰</div>
+                <div class="stat-value" id="totalRevenueStat">₹0</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">⏰</div>
+                <div class="stat-value" id="peakHourStat">--</div>
+                <div class="stat-label">Peak Hour</div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <!-- Orders Per Block Chart -->
+            <div class="chart-card">
+                <h2>📊 Orders per Block</h2>
+                <div class="bar-chart" id="blockChart"></div>
+            </div>
+
+            <!-- Top Stalls Chart -->
+            <div class="chart-card">
+                <h2>🏆 Top Ordered Stalls</h2>
+                <div class="bar-chart" id="stallChart"></div>
+            </div>
+        </div>
+
+        <!-- Live Order Counter -->
+        <div class="counter-card" style="margin-bottom: 2rem;">
+            <h3>📈 Live Order Counter</h3>
+            <div class="counter-display" id="liveCounter">0</div>
+            <div class="counter-info">Simulated real-time order updates</div>
+            <button class="refresh-btn" onclick="startLiveCounter()">Start Live Counter</button>
+        </div>
+
+        <!-- Most Ordered Items Table -->
+        <div class="table-card">
+            <h2>🔥 Most Ordered Items</h2>
+            <table id="topItemsTable">
+                <thead>
+                    <tr>
+                        <th>Item Name</th>
+                        <th>Block</th>
+                        <th>Stall</th>
+                        <th>Total Orders</th>
+                        <th>Revenue</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td colspan="5" style="text-align: center; padding: 2rem;">No data available yet</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let counterInterval;
+
+        // Load admin data
+        function loadAdminDashboard() {
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+            // Calculate total orders
+            document.getElementById('totalOrdersStat').textContent = orders.length;
+
+            // Calculate total revenue
+            let totalRevenue = 0;
+            orders.forEach(order => {
+                totalRevenue += order.total || 0;
+            });
+            document.getElementById('totalRevenueStat').textContent = '₹' + totalRevenue;
+
+            // Get unique stalls count
+            const stallsSet = new Set();
+            orders.forEach(order => {
+                order.items.forEach(item => {
+                    stallsSet.add(item.stall);
+                });
+            });
+            document.getElementById('totalStallsStat').textContent = stallsSet.size || 0;
+
+            // Calculate peak hour
+            const hourCounts = {};
+            orders.forEach(order => {
+                const hour = new Date(order.timestamp).getHours();
+                hourCounts[hour] = (hourCounts[hour] || 0) + 1;
+            });
+
+            let peakHour = '--';
+            if (Object.keys(hourCounts).length > 0) {
+                const maxHour = Object.keys(hourCounts).reduce((a, b) => 
+                    hourCounts[a] > hourCounts[b] ? a : b
+                );
+                peakHour = `${maxHour}:00`;
+            }
+            document.getElementById('peakHourStat').textContent = peakHour;
+
+            // Generate block chart
+            generateBlockChart(orders);
+
+            // Generate stall chart
+            generateStallChart(orders);
+
+            // Generate top items table
+            generateTopItemsTable(orders);
+        }
+
+        // Generate Orders per Block Chart
+        function generateBlockChart(orders) {
+            const blockCounts = {};
+            const blockNames = {
+                '34 Block': '34 Block',
+                '25 Block': '25 Block',
+                'Hospital Block': 'Hospital',
+                'Law Block': 'Law',
+                'NK Block': 'NK',
+                'BH-1 Block': 'BH-1',
+                'BH-2 Block': 'BH-2'
+            };
+
+            orders.forEach(order => {
+                order.items.forEach(item => {
+                    const block = item.block || 'Unknown';
+                    blockCounts[block] = (blockCounts[block] || 0) + 1;
+                });
+            });
+
+            const chartContainer = document.getElementById('blockChart');
+            chartContainer.innerHTML = '';
+
+            const maxCount = Math.max(...Object.values(blockCounts), 1);
+
+            Object.entries(blockCounts).forEach(([block, count]) => {
+                const height = (count / maxCount) * 250;
+                const barContainer = document.createElement('div');
+                barContainer.className = 'bar-container';
+
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = height + 'px';
+
+                const value = document.createElement('div');
+                value.className = 'bar-value';
+                value.textContent = count;
+
+                bar.appendChild(value);
+
+                const label = document.createElement('div');
+                label.className = 'bar-label';
+                label.textContent = blockNames[block] || block.split(' ')[0];
+
+                barContainer.appendChild(bar);
+                barContainer.appendChild(label);
+                chartContainer.appendChild(barContainer);
+            });
+        }
+
+        // Generate Top Stalls Chart
+        function generateStallChart(orders) {
+            const stallCounts = {};
+
+            orders.forEach(order => {
+                order.items.forEach(item => {
+                    const stall = item.stall || 'Unknown';
+                    stallCounts[stall] = (stallCounts[stall] || 0) + 1;
+                });
+            });
+
+            const topStalls = Object.entries(stallCounts)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 6);
+
+            const chartContainer = document.getElementById('stallChart');
+            chartContainer.innerHTML = '';
+
+            const maxCount = Math.max(...topStalls.map(s => s[1]), 1);
+
+            topStalls.forEach(([stall, count]) => {
+                const height = (count / maxCount) * 250;
+                const barContainer = document.createElement('div');
+                barContainer.className = 'bar-container';
+
+                const bar = document.createElement('div');
+                bar.className = 'bar';
+                bar.style.height = height + 'px';
+
+                const value = document.createElement('div');
+                value.className = 'bar-value';
+                value.textContent = count;
+
+                bar.appendChild(value);
+
+                const label = document.createElement('div');
+                label.className = 'bar-label';
+                label.textContent = stall.substring(0, 8);
+                label.title = stall;
+
+                barContainer.appendChild(bar);
+                barContainer.appendChild(label);
+                chartContainer.appendChild(barContainer);
+            });
+        }
+
+        // Generate Top Items Table
+        function generateTopItemsTable(orders) {
+            const itemStats = {};
+
+            orders.forEach(order => {
+                order.items.forEach(item => {
+                    const key = item.name + '|' + item.stall + '|' + item.block;
+                    if (!itemStats[key]) {
+                        itemStats[key] = {
+                            name: item.name,
+                            stall: item.stall,
+                            block: item.block,
+                            count: 0,
+                            revenue: 0
+                        };
+                    }
+                    itemStats[key].count += item.quantity;
+                    itemStats[key].revenue += item.price * item.quantity;
+                });
+            });
+
+            const topItems = Object.values(itemStats)
+                .sort((a, b) => b.revenue - a.revenue)
+                .slice(0, 10);
+
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            if (topItems.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; padding: 2rem;">No data available yet</td></tr>';
+                return;
+            }
+
+            topItems.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong class="stall-name">${item.name}</strong></td>
+                    <td>${item.block}</td>
+                    <td>${item.stall}</td>
+                    <td><span class="order-count">${item.count}</span></td>
+                    <td><strong class="stall-name">₹${item.revenue}</strong></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // Start live counter animation
+        function startLiveCounter() {
+            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            const totalOrders = orders.length;
+            const counter = document.getElementById('liveCounter');
+
+            clearInterval(counterInterval);
+
+            let current = 0;
+            counterInterval = setInterval(() => {
+                if (current < totalOrders) {
+                    current++;
+                    counter.textContent = current;
+                } else {
+                    clearInterval(counterInterval);
+                }
+            }, 100);
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userEmail');
+            window.location.href = 'index.html';
+        }
+
+        // Check if admin is logged in
+        function checkLogin() {
+            const role = localStorage.getItem('userRole');
+            if (!localStorage.getItem('isLoggedIn') || role !== 'admin') {
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Initialize
+        checkLogin();
+        loadAdminDashboard();
+    </script>
+</body>
+</html>
