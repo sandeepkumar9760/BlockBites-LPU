@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Block - LPU Food 3D</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+            color: #fff;
+            min-height: 100vh;
+        }
+
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .user-info {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .user-email {
+            font-size: 14px;
+            color: #cbd5e1;
+        }
+
+        .logout-btn {
+            padding: 8px 16px;
+            background: rgba(56, 189, 248, 0.2);
+            border: 1px solid #38bdf8;
+            border-radius: 6px;
+            color: #38bdf8;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px;
+        }
+
+        .logout-btn:hover {
+            background: #38bdf8;
+            color: #fff;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 40px;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, #38bdf8, #60a5fa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .blocks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .block-card {
+            background: rgba(30, 58, 138, 0.6);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(56, 189, 248, 0.3);
+            border-radius: 16px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .block-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .block-card:hover {
+            border-color: #38bdf8;
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(56, 189, 248, 0.2);
+        }
+
+        .block-card:hover::before {
+            opacity: 1;
+        }
+
+        .block-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .block-name {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #e0e7ff;
+        }
+
+        .block-info {
+            color: #cbd5e1;
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .block-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(56, 189, 248, 0.2);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: 600;
+            color: #38bdf8;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-top: 4px;
+        }
+
+        .select-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+            border: none;
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .select-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(56, 189, 248, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 28px; }
+            .blocks-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="canvas"></canvas>
+
+    <div class="container">
+        <header>
+            <div class="logo">🍜 LPU Food</div>
+            <div class="user-info">
+                <span class="user-email" id="userEmail"></span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </header>
+
+        <h1>Select Your Block</h1>
+
+        <div class="blocks-grid" id="blocksGrid"></div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Verify user is logged in
+        const userEmail = localStorage.getItem('userEmail');
+        if (!userEmail) {
+            window.location.href = 'login-3d.html';
+        }
+        document.getElementById('userEmail').textContent = userEmail;
+
+        // Three.js background animation
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('canvas'), antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x0f172a, 1);
+
+        camera.position.z = 5;
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0x38bdf8, 0.5);
+        directionalLight.position.set(5, 5, 5);
+        scene.add(directionalLight);
+
+        // Create floating geometric shapes
+        const shapes = [];
+        for (let i = 0; i < 6; i++) {
+            const geometries = [
+                new THREE.TetrahedronGeometry(1),
+                new THREE.OctahedronGeometry(1),
+                new THREE.DodecahedronGeometry(0.8)
+            ];
+            
+            const geometry = geometries[i % 3];
+            const material = new THREE.MeshPhongMaterial({
+                color: [0x38bdf8, 0x0ea5e9, 0x60a5fa][i % 3],
+                emissive: [0x38bdf8, 0x0ea5e9, 0x60a5fa][i % 3],
+                wireframe: true,
+                transparent: true,
+                opacity: 0.15
+            });
+            const shape = new THREE.Mesh(geometry, material);
+            
+            shape.position.x = (Math.random() - 0.5) * 20;
+            shape.position.y = (Math.random() - 0.5) * 20;
+            shape.position.z = Math.random() * -15;
+            
+            shapes.push({
+                mesh: shape,
+                speed: Math.random() * 0.5 + 0.1
+            });
+            
+            scene.add(shape);
+        }
+
+        // Animation
+        function animate() {
+            requestAnimationFrame(animate);
+
+            shapes.forEach((shape, i) => {
+                shape.mesh.rotation.x += shape.speed * 0.001;
+                shape.mesh.rotation.y += shape.speed * 0.002;
+                shape.mesh.position.y += Math.sin(Date.now() * 0.0001 + i) * 0.01;
+            });
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Block data
+        const blocks = [
+            {
+                name: 'Block A',
+                icon: '🏢',
+                location: 'North Campus',
+                stalls: 12,
+                activeOrders: 45,
+                demand: 'High'
+            },
+            {
+                name: 'Block B',
+                icon: '🏛️',
+                location: 'Central Campus',
+                stalls: 10,
+                activeOrders: 32,
+                demand: 'Medium'
+            },
+            {
+                name: 'Block C',
+                icon: '🏪',
+                location: 'East Campus',
+                stalls: 8,
+                activeOrders: 18,
+                demand: 'Low'
+            },
+            {
+                name: 'Block D',
+                icon: '🏭',
+                location: 'Tech Park',
+                stalls: 15,
+                activeOrders: 56,
+                demand: 'Very High'
+            }
+        ];
+
+        // Render blocks
+        const blocksGrid = document.getElementById('blocksGrid');
+        blocks.forEach((block, index) => {
+            const blockCard = document.createElement('div');
+            blockCard.className = 'block-card';
+            blockCard.innerHTML = `
+                <div class="block-icon">${block.icon}</div>
+                <div class="block-name">${block.name}</div>
+                <div class="block-info">${block.location}</div>
+                <div class="block-stats">
+                    <div class="stat">
+                        <div class="stat-value">${block.stalls}</div>
+                        <div class="stat-label">Stalls</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">${block.activeOrders}</div>
+                        <div class="stat-label">Orders</div>
+                    </div>
+                </div>
+                <button class="select-btn" onclick="selectBlock('${block.name}')">Select Block</button>
+            `;
+            blocksGrid.appendChild(blockCard);
+        });
+
+        function selectBlock(blockName) {
+            localStorage.setItem('selectedBlock', blockName);
+            window.location.href = 'stalls-3d.html';
+        }
+
+        function logout() {
+            localStorage.clear();
+            window.location.href = 'index-3d.html';
+        }
+    </script>
+</body>
+</html>
