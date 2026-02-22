@@ -20,6 +20,7 @@ class Stall(models.Model):
     name = models.CharField(max_length=100)
     rating = models.FloatField(default=0.0)
     is_open = models.BooleanField(default=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return f"{self.name} ({self.block.name})"

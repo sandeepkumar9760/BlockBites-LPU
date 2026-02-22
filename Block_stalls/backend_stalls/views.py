@@ -188,3 +188,15 @@ def update_cart(request, item_id, action):
 
     request.session['cart'] = cart
     return redirect('cart')
+
+@login_required
+def stall_dashboard(request):
+    # get stall owned by logged-in user
+    stall = Stall.objects.get(owner=request.user)
+
+    # get all orders for this stall
+    orders = Order.objects.filter(stall=stall).order_by('-created_at')
+
+    return render(request, 'stall_dashboard.html', {
+        'orders': orders
+    })
