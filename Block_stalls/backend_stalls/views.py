@@ -200,3 +200,13 @@ def stall_dashboard(request):
     return render(request, 'stall_dashboard.html', {
         'orders': orders
     })
+
+@login_required
+def update_order_status(request, order_id, status):
+    stall = Stall.objects.get(owner=request.user)
+
+    order = Order.objects.get(id=order_id, stall=stall)
+    order.status = status
+    order.save()
+
+    return redirect('stall_dashboard')
