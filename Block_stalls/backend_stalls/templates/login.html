@@ -200,45 +200,37 @@
 <body>
     <canvas id="canvas"></canvas>
 
-    <a href="index.html" class="back-link">← Back</a>
-
     <div class="login-container">
         <div class="logo">🍜</div>
         <h1>Login</h1>
-        <p class="subtitle">Choose your role and sign in</p>
+        <p class="subtitle">Sign in to your account</p>
 
-        <div class="form-group">
-            <label>Select Role</label>
-            <div class="role-selector">
-                <button class="role-btn active" onclick="selectRole('student')">Student</button>
-                <button class="role-btn" onclick="selectRole('admin')">Admin</button>
-            </div>
-        </div>
         {% if error %}
-    <p style="color:red;">{{ error }}</p>
-{% endif %}
+            <p style="color:red; text-align:center;">{{ error }}</p>
+        {% endif %}
 
-       <form method="POST">
-    {% csrf_token %}
+        <form method="POST">
+            {% csrf_token %}
 
-    <div class="form-group">
-        <label>Username</label>
-        <input type="text" name="username" required>
-    </div>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" name="username" required>
+            </div>
 
-    <div class="form-group">
-        <label>Password</label>
-        <input type="password" name="password" required>
-    </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" name="password" required>
+            </div>
 
-    <button type="submit" class="btn">Login</button>
-</form>
+            <button type="submit" class="btn">Login</button>
+        </form>
 
         <div class="footer-text">
-            Don't have an account? <a href="{% url 'signup' %}">Sign up here</a>
+            Don't have an account?
+            <a href="{% url 'signup' %}">Sign up here</a>
         </div>
     </div>
-
+</body>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script>
         // Three.js setup

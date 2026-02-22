@@ -126,10 +126,15 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            return redirect("blocks")
+
+            # Check if user is stall owner
+            if user.groups.filter(name="StallOwner").exists():
+                return redirect("stall_dashboard")
+            else:
+                return redirect("blocks")
+
         else:
-            messages.error(request, "Invalid credentials.")
-            return redirect("login")
+            return render(request, "login.html", {"error": "Invalid credentials"})
 
     return render(request, "login.html")
 
