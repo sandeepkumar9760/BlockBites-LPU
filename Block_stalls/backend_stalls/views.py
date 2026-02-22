@@ -191,11 +191,8 @@ def update_cart(request, item_id, action):
 
 @login_required
 def stall_dashboard(request):
-    # get stall owned by logged-in user
-    stall = Stall.objects.get(owner=request.user)
-
-    # get all orders for this stall
-    orders = Order.objects.filter(stall=stall).order_by('-created_at')
+    # Get orders only for stalls owned by logged in user
+    orders = Order.objects.filter(stall__owner=request.user).order_by('-created_at')
 
     return render(request, 'stall_dashboard.html', {
         'orders': orders
@@ -203,9 +200,12 @@ def stall_dashboard(request):
 
 @login_required
 def update_order_status(request, order_id, status):
-    stall = Stall.objects.get(owner=request.user)
+    order = Order.objects.get(id=order_id)
 
-    order = Order.objects.get(id=order_id, stall=stall)
+    # Security: Only stall owner can update
+    if order.stall.owner != request.user:
+        return redirect('stall_dashboard')
+
     order.status = status
     order.save()
 

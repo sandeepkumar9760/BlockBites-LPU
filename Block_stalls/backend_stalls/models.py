@@ -52,10 +52,11 @@ class TimeSlot(models.Model):
 # 5️⃣ Order Model
 class Order(models.Model):
     STATUS_CHOICES = (
-        ("Pending", "Pending"),
-        ("Confirmed", "Confirmed"),
-        ("Completed", "Completed"),
-    )
+    ("Pending", "Pending"),
+    ("Confirmed", "Confirmed"),
+    ("Rejected", "Rejected"),
+    ("Completed", "Completed"),
+)
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     block = models.ForeignKey(Block, on_delete=models.SET_NULL, null=True)

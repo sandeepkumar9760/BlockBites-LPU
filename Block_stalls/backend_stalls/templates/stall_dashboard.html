@@ -22,14 +22,11 @@
     </ul>
 
     {% if order.status == "Pending" %}
-        <a href="{% url 'update_order_status' order.id 'Confirmed' %}">
-            Confirm
-        </a>
-
-        <a href="{% url 'update_order_status' order.id 'Completed' %}">
-            Complete
-        </a>
-    {% endif %}
+    <a href="{% url 'update_order_status' order.id 'Confirmed' %}">Accept</a>
+    <a href="{% url 'update_order_status' order.id 'Rejected' %}">Reject</a>
+{% elif order.status == "Confirmed" %}
+    <a href="{% url 'update_order_status' order.id 'Completed' %}">Mark Completed</a>
+{% endif %}
 
 </div>
 
