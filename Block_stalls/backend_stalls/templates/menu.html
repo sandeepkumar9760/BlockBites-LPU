@@ -226,6 +226,16 @@
 </head>
 <body>
     <h1>Menu - {{ stall.name }}</h1>
+    <a href="{% url 'cart' %}" style="
+    background:#38bdf8;
+    padding:8px 15px;
+    border-radius:8px;
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+">
+    🛒 Cart ({{ cart_count }})
+</a>
 
 <div class="menu-grid">
     {% for item in menu_items %}

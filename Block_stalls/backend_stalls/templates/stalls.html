@@ -214,6 +214,16 @@
         </header>
 
         <h1>Available Stalls</h1>
+        <a href="{% url 'cart' %}" style="
+    background:#38bdf8;
+    padding:8px 15px;
+    border-radius:8px;
+    color:white;
+    text-decoration:none;
+    font-weight:600;
+">
+    🛒 Cart ({{ cart_count }})
+</a>
 
         <div class="stalls-grid">
     {% for stall in stalls %}
