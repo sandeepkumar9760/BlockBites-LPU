@@ -178,30 +178,37 @@
     <div class="cart-content">
 
         <!-- CART ITEMS -->
-        <div class="cart-items">
-            {% if items %}
-                {% for entry in items %}
-                    <div class="cart-item">
-                        <div class="item-info">
-                            <div class="item-icon">🍽️</div>
-                            <div class="item-details">
-                                <h3>{{ entry.item.name }}</h3>
-                                <p>{{ entry.item.stall.name }}</p>
-                            </div>
-                        </div>
+        {% for entry in items %}
+<div class="cart-item">
 
-                        <div class="item-price">
-                            ₹ {{ entry.subtotal }}
-                        </div>
-                    </div>
-                {% endfor %}
-            {% else %}
-                <div class="cart-empty">
-                    🛒 Your cart is empty.
-                </div>
-            {% endif %}
-        </div>
+    <div>
+        <h3>{{ entry.item.name }}</h3>
+        <p>₹ {{ entry.item.price }}</p>
+    </div>
 
+    <div style="display:flex; align-items:center; gap:10px;">
+
+        <!-- Decrease -->
+        <a href="{% url 'update_cart' entry.item.id 'decrease' %}">
+            <button>-</button>
+        </a>
+
+        <span>{{ entry.quantity }}</span>
+
+        <!-- Increase -->
+        <a href="{% url 'update_cart' entry.item.id 'increase' %}">
+            <button>+</button>
+        </a>
+
+        <!-- Remove -->
+        <a href="{% url 'update_cart' entry.item.id 'remove' %}">
+            <button style="color:red;">Remove</button>
+        </a>
+
+    </div>
+
+</div>
+{% endfor %}
         <!-- SUMMARY -->
         <div class="cart-summary">
             <form method="POST" action="{% url 'checkout' %}">
