@@ -170,3 +170,21 @@ def signup_view(request):
 def logout_view(request):
     logout(request)
     return redirect("login")
+
+def update_cart(request, item_id, action):
+    cart = request.session.get('cart', {})
+
+    if str(item_id) in cart:
+        if action == "increase":
+            cart[str(item_id)] += 1
+
+        elif action == "decrease":
+            cart[str(item_id)] -= 1
+            if cart[str(item_id)] <= 0:
+                del cart[str(item_id)]
+
+        elif action == "remove":
+            del cart[str(item_id)]
+
+    request.session['cart'] = cart
+    return redirect('cart')
