@@ -51,7 +51,28 @@
 </head>
 <body>
 
-<h1>My Dashboard</h1>
+<div style="display:flex; justify-content:space-between; align-items:center;">
+    <h1>My Dashboard</h1>
+
+    <div style="position:relative; font-size:22px;">
+        🔔
+        {% if new_notifications > 0 %}
+            <span style="
+                position:absolute;
+                top:-8px;
+                right:-12px;
+                background:red;
+                color:white;
+                font-size:12px;
+                padding:3px 7px;
+                border-radius:50%;
+                font-weight:bold;
+            ">
+                {{ new_notifications }}
+            </span>
+        {% endif %}
+    </div>
+</div>
 
 <div class="stat-card">
     <p>Total Orders: {{ total_orders }}</p>
