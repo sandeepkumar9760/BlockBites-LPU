@@ -249,7 +249,7 @@ Contributions are welcome! To contribute to BlockBites-LPU:
 - 🐙 GitHub: [@sandeepkumar9760](https://github.com/sandeepkumar9760)
 - 🎓 Institution: Lovely Professional University (LPU)
 - 📧 Email: *`[PLACEHOLDER — sandeepkumar270724@gmail.com]`*
-- 💼 LinkedIn: *`[PLACEHOLDER — https://www.linkedin.com/in/sandeep-kumar-ds/]`*
+- 💼 LinkedIn: [@sandeep_linkedIn](https://www.linkedin.com/in/sandeep-kumar-ds/)
 
 
 <p align="center">Made with ❤️ for the LPU Campus Community</p>
