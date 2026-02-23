@@ -160,12 +160,6 @@ The admin panel is accessible at: **http://127.0.0.1:8000/admin/**
 1. Access the Django Admin Panel at `/admin/`.
 2. Manage users, stalls, blocks, and orders across the entire platform.
 
-> *`[PLACEHOLDER]` — Add screenshots here once the UI is finalized. Example:*
-> ```
-> ![Homepage Screenshot](docs/screenshots/homepage.png)
-> ![Order Tracking](docs/screenshots/order_tracking.png)
-> ```
-
 ---
 
 ## 🗂️ Project Structure
@@ -219,21 +213,6 @@ gunicorn BlockBites_LPU.wsgi:application --bind 0.0.0.0:8000
 ```
 
 Configure **Nginx** as a reverse proxy, then use **Let's Encrypt** for HTTPS.
-
-### Deploy on Render / Railway / Heroku
-
-1. Set all environment variables in the platform dashboard.
-2. Set `DEBUG=False` and configure `ALLOWED_HOSTS`.
-3. Use a managed PostgreSQL service for the database.
-4. Run migrations on deploy:
-   ```bash
-   python manage.py migrate
-   python manage.py collectstatic --noinput
-   ```
-
-> *`[PLACEHOLDER]` — Add a link to a live demo or deployed instance here if available.*
-
----
 
 ## 🤝 Contributing
 
