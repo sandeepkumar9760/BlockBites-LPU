@@ -233,15 +233,6 @@ Contributions are welcome! To contribute to BlockBites-LPU:
    ```
 5. **Open a Pull Request** against the `main` branch of this repository.
 
-### Guidelines
-
-- Follow [PEP 8](https://pep8.org/) for Python code style.
-- Write meaningful commit messages.
-- Ensure all migrations are included for model changes.
-- Test your changes locally before submitting a PR.
-- Document any new features or API endpoints.
-
-
 
 ## 📬 Contact / Author
 
