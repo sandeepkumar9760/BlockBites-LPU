@@ -236,6 +236,24 @@
 ">
     🛒 Cart ({{ cart_count }})
 </a>
+<div style="position:relative; margin-right:20px;">
+    🔔
+    {% if global_notifications > 0 %}
+        <span style="
+            position:absolute;
+            top:-8px;
+            right:-12px;
+            background:red;
+            color:white;
+            font-size:12px;
+            padding:3px 7px;
+            border-radius:50%;
+            font-weight:bold;
+        ">
+            {{ global_notifications }}
+        </span>
+    {% endif %}
+</div>
 
 <div class="menu-grid">
     {% for item in menu_items %}
