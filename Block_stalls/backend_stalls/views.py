@@ -4,7 +4,20 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.contrib import messages
+@login_required
+def student_dashboard(request):
+    orders = Order.objects.filter(user=request.user).order_by('-created_at')
 
+    total_orders = orders.count()
+    total_spent = sum(order.total_price for order in orders)
+    pending_orders = orders.filter(status="Pending").count()
+
+    return render(request, "student_dashboard.html", {
+        "orders": orders,
+        "total_orders": total_orders,
+        "total_spent": total_spent,
+        "pending_orders": pending_orders,
+    })
 
 @login_required
 def checkout(request):

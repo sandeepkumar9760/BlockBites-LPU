@@ -363,7 +363,7 @@
 
         // Dashboard functionality
         function loadDashboard() {
-            const orders = JSON.parse(localStorage.getItem('orders')) || [];
+            {% for order in orders %}
             const selectedBlock = localStorage.getItem('selectedBlock') || 'Block A';
             
             // Update stats
