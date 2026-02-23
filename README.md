@@ -241,21 +241,15 @@ Contributions are welcome! To contribute to BlockBites-LPU:
 - Test your changes locally before submitting a PR.
 - Document any new features or API endpoints.
 
----
 
-## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
----
 
 ## 📬 Contact / Author
 
 **Sandeep Kumar**
 - 🐙 GitHub: [@sandeepkumar9760](https://github.com/sandeepkumar9760)
 - 🎓 Institution: Lovely Professional University (LPU)
-- 📧 Email: *`[PLACEHOLDER — add your email]`*
-- 💼 LinkedIn: *`[PLACEHOLDER — add your LinkedIn URL]`*
+- 📧 Email: *`[PLACEHOLDER — sandeepkumar270724@gmail.com]`*
+- 💼 LinkedIn: *`[PLACEHOLDER — https://www.linkedin.com/in/sandeep-kumar-ds/]`*
 
 ---
 
