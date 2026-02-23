@@ -201,7 +201,7 @@
 </head>
 <body>
     <canvas id="canvas"></canvas>
-    <div style="position:relative; margin-right:20px;">
+   <a href="{% url 'student_dashboard' %}" style="position:relative; margin-right:20px; text-decoration:none; font-size:20px;">
     🔔
     {% if global_notifications > 0 %}
         <span style="
@@ -218,7 +218,7 @@
             {{ global_notifications }}
         </span>
     {% endif %}
-</div>
+</a>
     <div class="container">
         <header>
             <div class="logo">🍜 LPU Food</div>

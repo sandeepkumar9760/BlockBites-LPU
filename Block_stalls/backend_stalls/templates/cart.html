@@ -163,7 +163,7 @@
     </style>
 </head>
 <body>
-    <div style="position:relative; margin-right:20px;">
+    <a href="{% url 'student_dashboard' %}" style="position:relative; margin-right:20px; text-decoration:none; font-size:20px;">
     🔔
     {% if global_notifications > 0 %}
         <span style="
@@ -180,7 +180,7 @@
             {{ global_notifications }}
         </span>
     {% endif %}
-</div>
+</a>
 
 <canvas id="canvas"></canvas>
 
