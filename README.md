@@ -251,31 +251,5 @@ Contributions are welcome! To contribute to BlockBites-LPU:
 - 📧 Email: *`[PLACEHOLDER — sandeepkumar270724@gmail.com]`*
 - 💼 LinkedIn: *`[PLACEHOLDER — https://www.linkedin.com/in/sandeep-kumar-ds/]`*
 
----
-
-## 🔗 Relevant Links
-
-| Resource | Link |
-|----------|------|
-| 🏠 Repository | [github.com/sandeepkumar9760/BlockBites-LPU](https://github.com/sandeepkumar9760/BlockBites-LPU) |
-| 🌍 Live Demo | *`[PLACEHOLDER — add deployment URL]`* |
-| 📚 Documentation | *`[PLACEHOLDER — add docs URL if applicable]`* |
-| 🐛 Issue Tracker | [GitHub Issues](https://github.com/sandeepkumar9760/BlockBites-LPU/issues) |
-
----
-
-## 🗺️ Roadmap
-
-- [x] Block-based stall browsing
-- [x] Order placement and tracking
-- [x] Django Admin management
-- [ ] REST API with Django REST Framework
-- [ ] Mobile-responsive UI improvements
-- [ ] AI-driven demand prediction model integration
-- [ ] Push notifications for order status updates
-- [ ] Payment gateway integration
-- [ ] Student loyalty/rewards system
-
----
 
 <p align="center">Made with ❤️ for the LPU Campus Community</p>
