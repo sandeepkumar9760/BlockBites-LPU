@@ -152,7 +152,7 @@ def login_view(request):
             if user.groups.filter(name="StallOwner").exists():
                 return redirect("stall_dashboard")
             else:
-                return redirect("blocks")
+                return redirect("student_dashboard")
 
         else:
             return render(request, "login.html", {"error": "Invalid credentials"})
